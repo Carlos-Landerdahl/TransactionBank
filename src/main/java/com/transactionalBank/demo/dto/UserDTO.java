@@ -2,6 +2,7 @@ package com.transactionalBank.demo.dto;
 
 import com.transactionalBank.demo.entities.User;
 import com.transactionalBank.demo.entities.UserType;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,12 +11,23 @@ import java.math.BigDecimal;
 @Getter
 public class UserDTO {
     private Long id;
+    @NotBlank(message = "Campo requerido")
+    @Size(min = 3, max = 80, message = "Nome precisa ter de 3 a 80 caracteres")
     private String name;
+    @NotBlank(message = "Campo requerido")
+    @Size(min = 3, max = 80, message = "Sobrenome precisa ter de 3 a 80 caracteres")
     private String lastName;
+    @NotBlank(message = "Campo requerido")
+    @Size(min = 3, max = 12, message = "Senha precisa ter de 3 a 12 caracteres")
     private String password;
+    @NotBlank(message = "Campo requerido")
     private String document;
+    @Email
+    @NotBlank(message = "Campo requerido")
     private String email;
+    @Positive(message = "O saldo não pode ser negativo")
     private BigDecimal balance;
+    @NotNull(message = "Campo requerido")
     private UserType userType;
 
     public UserDTO(User user) {

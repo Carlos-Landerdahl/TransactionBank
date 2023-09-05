@@ -4,6 +4,9 @@ import com.transactionalBank.demo.dto.UserDTO;
 import com.transactionalBank.demo.entities.User;
 import com.transactionalBank.demo.entities.UserType;
 import com.transactionalBank.demo.repositories.UserRepository;
+import com.transactionalBank.demo.servicies.exceptions.InsufficientBalanceException;
+import com.transactionalBank.demo.servicies.exceptions.InvalidUserTypeException;
+import com.transactionalBank.demo.servicies.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,17 +36,17 @@ public class UserService {
         return repository.findAll();
     }
 
-    public void validateTransaction(User sender, BigDecimal amount) throws Exception {
-        if(sender.getUserType() == UserType.MERCHANT){
-            throw new Exception("Lojista não esta autorizado a fazer transações de envio");
+    public void validateTransaction(User sender, BigDecimal amount) {
+        if (sender.getUserType() == UserType.MERCHANT) {
+            throw new InvalidUserTypeException("Lojista não está autorizado a fazer transações de envio");
         }
 
-        if(sender.getBalance().compareTo(amount) < 0){
-            throw new Exception("Saldo insuficiente");
+        if (sender.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientBalanceException("Saldo insuficiente");
         }
     }
 
     public User findById(Long id) throws Exception {
-        return repository.findById(id).orElseThrow(() -> new Exception("Usuário não encontrado"));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
     }
 }
