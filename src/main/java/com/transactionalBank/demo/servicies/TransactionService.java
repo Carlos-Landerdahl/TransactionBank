@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,6 +27,7 @@ public class TransactionService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Transactional
     public Transaction createTransaction(TransactionDTO transaction) throws Exception {
         User sender = userService.findById(transaction.getSender());
         User receiver = userService.findById(transaction.getReceiver());
@@ -60,5 +63,10 @@ public class TransactionService {
             String message = (String) authorizationResponse.getBody().get("message");
             return "Autorizado".equalsIgnoreCase(message);
         } else return false;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Transaction> findAll(){
+        return repository.findAll();
     }
 }

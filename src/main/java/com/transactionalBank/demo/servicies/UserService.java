@@ -27,6 +27,7 @@ public class UserService {
         return new UserDTO(entity);
     }
 
+    @Transactional
     public void saveUser(User user){
         repository.save(user);
     }
@@ -34,6 +35,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<User> findAll(){
         return repository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public User findById(Long id) throws Exception {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
     }
 
     public void validateTransaction(User sender, BigDecimal amount) {
@@ -46,7 +52,5 @@ public class UserService {
         }
     }
 
-    public User findById(Long id) throws Exception {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));
-    }
+
 }

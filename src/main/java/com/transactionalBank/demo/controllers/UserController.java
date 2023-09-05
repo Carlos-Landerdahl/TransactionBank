@@ -28,4 +28,10 @@ public class UserController {
         List<User> user = service.findAll();
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<User> findByid(@PathVariable Long id) throws Exception {
+        User user = service.findById(id);
+        return ResponseEntity.ok(user);
+    }
 }
