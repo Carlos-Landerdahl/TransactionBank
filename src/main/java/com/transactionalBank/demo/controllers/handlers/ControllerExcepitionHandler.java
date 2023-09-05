@@ -45,7 +45,7 @@ public class ControllerExcepitionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<CustomError> handleDataIntegrityViolationException(DataIntegrityViolationException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.CONFLICT; // ou HttpStatus.BAD_REQUEST, dependendo da sua preferência.
+        HttpStatus status = HttpStatus.CONFLICT;
         CustomError err = new CustomError(Instant.now(), status.value(), "Os dados fornecidos já existem no sistema", request.getRequestURI());
         return ResponseEntity.status(status.value()).body(err);
     }
